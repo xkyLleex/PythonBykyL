@@ -1,2 +1,2 @@
-# PythonBykyL
-Just for class or other use
+# 當天星期幾
+當你打開時，輸入日期(ex:2018 9 26) 就會出現當天星期幾了
