@@ -1,7 +1,7 @@
 # MidtermExam期中考
                                                                                               
 說明於此http://irw.ncut.edu.tw/peterju/course/scripting/1071/quiz/midexam.htm                                                
-如果網址消失，那我也沒轍！
+如果網址消失，那我也沒辦法TT！                                                                         
 說明
 ----------------------------------------------------------------------------
 一個登入器，以accounts.txt裡的資料來建立使用者帳密跟權限                                                                        
