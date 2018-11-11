@@ -1,4 +1,4 @@
-#MidtermExam
+# MidtermExam期中考
                                                                                               
 說明於此http://irw.ncut.edu.tw/peterju/course/scripting/1071/quiz/midexam.htm                                                
 如果網址消失，那我也沒轍！
