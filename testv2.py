@@ -7,7 +7,7 @@ def lastlog():
 def wlog(move,name):
     datalogdict={}
     datalogdict["action"]=move
-    datalogdict["datatime"]=time.strftime(",%Y-%m-%d %H:%M:%S,")
+    datalogdict["datatime"]=time.strftime("%Y-%m-%d %H:%M:%S")
     datalogdict["username"]=name
     return datalogdict
 def login(acc,pwd,datalist):
