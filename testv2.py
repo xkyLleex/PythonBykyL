@@ -2,7 +2,7 @@ import pprint,time
 def lastlog():
     file=open(time.strftime("%m%d%H%M.log"), "a",encoding="UTF-8")
     for dict in dataloglist:
-        file.write(dict["username"]+dict["datatime"]+dict["action"]+"\n")
+        file.write(dict["username"]+","+dict["datatime"]+","+dict["action"]+"\n")
     file.close
 def wlog(move,name):
     datalogdict={}
