@@ -28,7 +28,8 @@ def one():
         else:filmName = soup.select_one("div.rank_list.table.rankstyle1 > div:nth-of-type({}) > div:nth-of-type(4) > a > div".format(i)).text
         sql = "INSERT INTO films(filmName, filmDate, filmRating) VALUES ('{}','{}',{});".format(filmName, filmDate, float(filmRating))
         database.execute(sql)
-    print("change 10 record")
+    database.commit()
+    print("change {} records".format(database.total_changes))
 def two():
     try:
         filmsdata = database.execute("select * from films;")
@@ -44,7 +45,8 @@ def three():
     try:
         database.execute("DELETE FROM films;")
         database.execute("DELETE FROM sqlite_sequence WHERE name = 'films';")
-        print("change 10 record")
+        database.commit()
+        print("change {} records".format(database.total_changes))
     except:
         print("資料庫錯誤:no such table:filmes")
 database = sqlite3.connect('movieList.db')
@@ -55,5 +57,4 @@ while True:
     elif num == "2":two()
     elif num == "3":three()
     else:print("並無此代碼")
-    database.commit()
 database.close()
