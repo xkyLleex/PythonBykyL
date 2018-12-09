@@ -36,11 +36,12 @@ def two():
     except:
         print("資料庫錯誤:no such table:filmes")
         return
-    print("----------------------------------------------------------")
+    print("------------------------------------------------")
     print("排名  放映日期   推薦   片名")
-    print("----------------------------------------------------------")
+    print("------------------------------------------------")
     for record in filmsdata:
         print(" {:>2}  {}   {}   {}".format(record[0],record[2],record[3],record[1]))
+    print("------------------------------------------------")
 def three():
     try:
         database.execute("DELETE FROM films;")
