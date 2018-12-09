@@ -47,4 +47,4 @@ def testgo():
         if re.search(r'[a-zA-Z0-9_.+-]+@gmail+\.[a-zA-Z0-9-.]+',mailuser)!=None:
             mailpassword = input("請輸入Email密碼:")
             emailgo(mailuser,mailpassword)
-        print("email格式錯誤或使用非Gmail的帳號")
+        else:print("email格式錯誤或使用非Gmail的帳號")
