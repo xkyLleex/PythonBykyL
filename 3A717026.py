@@ -49,12 +49,12 @@ def three():
         print("change {} records".format(database.total_changes))
     except:
         print("資料庫錯誤:no such table:filmes")
-database = sqlite3.connect('movieList.db')
 while True:
     num = input("\n請輸入你想執行的功能，直接Enter則離開\n1. 即時擷取資料\n2. 查詢電影排行\n3. 清除資料\n=>")
     if num == "":break
-    elif num == "1":one()
+    database = sqlite3.connect('movieList.db')
+    if num == "1":one()
     elif num == "2":two()
     elif num == "3":three()
     else:print("並無此代碼")
-database.close()
+    database.close()
