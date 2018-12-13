@@ -173,7 +173,7 @@ def stockgo():
                     datalist.pop(i)
                     i-=1
                 i+=1
-            time.sleep(1)#frush
+            time.sleep(1)#Refresh
             print(nowtime)
             if len(datalist) == 0:
                 print("股票全數完畢")
