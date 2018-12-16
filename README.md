@@ -10,8 +10,7 @@ final2為圖案
 新增      
 stock.py      
 main.py     
-emailtest.py      
--------     
+emailtest.py          
 2018/12/16   19:42      
-上傳final2.py
+上傳final2.py     
 修正and增加stock.py
