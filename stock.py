@@ -17,18 +17,14 @@ def analysis(stocknum):
     start=end-passyear
     company=["{}.TW".format(stocknum)]
     stockfind=web.DataReader(company,"yahoo",start,end)
-    stockfind["20d"]=round(stockfind["Adj Close"].rolling(window=20).mean(),2)
-    stockfind["50d"]=round(stockfind["Adj Close"].rolling(window=50).mean(),2)
-    stockfind["200d"]=round(stockfind["Adj Close"].rolling(window=200).mean(),2)
+    stockfind["100d"]=round(stockfind["Adj Close"].rolling(window=100).mean(),2)
+    stockfind.dropna(inplace=True)
+    print(stockfind["Adj Close"].plot(color="black"))
+    print(stockfind["100d"].plot(color="orange",legend="100d"))
     global datastock,infodata
     datastock=[]
     for line in round(stockfind.mean(),2):
         datastock.append(line)
-    stockfind.dropna(inplace=True)
-    print(stockfind["Adj Close"].plot(color="black"))
-    print(stockfind["20d"].plot(color="red",legend="20d"))
-    print(stockfind["50d"].plot(color="blue",legend="50d"))
-    print(stockfind["200d"].plot(color="orange",legend="200d"))
     plt.savefig("{}({}).png".format(end,stockname))
     #------------infodata 0:kline data:1 2 3 4 5...
     infodata=[]
