@@ -6,9 +6,9 @@ stock為股票功能用
 emailtest為email測試用      
 final2為圖案測試      
 chromedriver.exe為selenium模組模擬用      
--------     
-*注意:請去安裝python的selenium模組*     
-*指令：pip install selenium*      
+-------
+*注意:請去安裝python的selenium模組     
+*指令：pip install selenium      
 -------
 ---2018/12/07   00:14      
 新增      
