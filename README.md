@@ -14,6 +14,6 @@ main.py
 emailtest.py          
 2018/12/16   19:42      
 上傳final2.py     
-修正and增加stock.py
-2018/12/17   18:25
+修正and增加stock.py      
+2018/12/17   18:25      
 上傳chromedriver.exe
