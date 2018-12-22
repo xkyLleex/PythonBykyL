@@ -23,6 +23,6 @@ emailtest.py(測試Email)
 新增chromedriver.exe(selenium模組用)
 ---2018/12/22   16:35     
 新增      
-bookstock.py(預定用)      
+bookstock.py(股票預定用)      
 用startstock.py(開始股票通知用)     
 取代stock.py      
