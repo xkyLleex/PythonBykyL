@@ -20,7 +20,7 @@ emailtest.py(測試Email)
 新增final2.py(圖案)     
 修正and增加stock.py      
 ---2018/12/17   18:25      
-新增chromedriver.exe(selenium模組用)
+新增chromedriver.exe(selenium模組用)     
 ---2018/12/22   16:35     
 新增      
 bookstock.py(股票預定用)      
