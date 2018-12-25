@@ -1,18 +1,36 @@
-import re , bs4 , time , requests
+import re , bs4 , time , requests , sqlite3
 
 def writein(data):
-    print("寫入資料中.....")
+    print("\n寫入資料中.....")
+    date=data["date"]
+    time=data["time"]
+    stock=data["stocknum"]
+    hstock=data["hopestock"]
     try:
-        file=open("BookStock.log", "a",encoding="UTF-8")
-        file.write(data["date"] + "|")
-        file.write(data["time"] + "|")
-        file.write(data["stocknum"] + "|")
-        file.write(data["hopestock"] + "\n")
-        file.close()
-        print("完成.....")
-    except Exception as e:
-        print("發生錯誤:{}".format(e))
-        quit()
+        conn = sqlite3.connect('bookstock.db')
+        conn.execute('''
+        create table if not exists stockdata
+            (
+             date    text      not null,
+             time    text      not null,
+             stock   integer   not null,
+             hstock  REAL      not null
+            );
+        ''')
+        sql = "select count(*) from stockdata where date='{}' and stock={};".format(date,stock)
+        data = conn.execute(sql)
+        match = data.fetchone()
+        if match[0] == 0:
+            conn.execute('''
+            insert into stockdata(date, time, stock, hstock) values ('{}','{}',{},{});
+            '''.format(date,time,stock,hstock))
+            conn.commit()
+            print("\n完成.....")
+        else:print("\n資料庫已有這筆資料了({}股票代碼:{})，請更換或把它刪除！".format(date,stock))
+    except sqlite3.Error as e:print("\n資料庫錯誤:{}".format(e))
+    except Exception as e:print("\n錯誤:{}".fomrat(e))
+    finally:
+        if "conn" in dir():conn.close()
 def stockcheck(stocknum):
     try:
         url = "https://tw.finance.yahoo.com/q/ts?s={}".format(stocknum)
@@ -47,12 +65,12 @@ def timecheck(date):
         (hour,mins,sec)=settime.split(".")
         try:
             if 24 > int(hour) >= 0 and 60 > int(mins) >= 0 and 60 > int(sec) >= 0:
-                if 20 > int(hour) > 8:
+                if 24 > int(hour) > 8:
                     if date != time.strftime("%Y-%m-%d"):return settime
                     if int(hour) < int(time.strftime("%H")):return 6
                     if int(hour) == int(time.strftime("%H")):
                         if int(mins) < int(time.strftime("%M")):return 6
-                        elif int(mins) == int(time.strftime("%M")) and int(sec) <= int(time.strftime("%s")):
+                        elif int(mins) == int(time.strftime("%M")) and int(sec) <= int(time.strftime("%S")):
                             return 6
                     return settime
                 else:return 5
@@ -73,7 +91,7 @@ def datecheck():
             year = int(stryear)
             month = int(strmonth)
             day = int(strday)
-            if 13 < month or month < 0 :return 3
+            if 12 < month or month < 1 :return 3
             if month != 2:
                 if day <= 0:return 3
                 if month < 8:
@@ -162,8 +180,8 @@ def bookstockgo():
                         print("請輸入未來的時間")
                         continue
 #run------------------------------------------------------------
-                    stockdata["stocknum"]=stocknum
-                    stockdata["hopestock"]=stockhigh
+                    stockdata["stocknum"]=int(stocknum)
+                    stockdata["hopestock"]=float(stockhigh)
                     stockdata["date"]=setdate
                     stockdata["time"]=settime
                     data = True

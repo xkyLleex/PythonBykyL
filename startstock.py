@@ -1,6 +1,6 @@
-import requests, bs4 , smtplib , time , re , os , msvcrt
-import matplotlib.pyplot as plt  
-import pandas_datareader.data as web 
+import requests, bs4 , smtplib , time , re , os , msvcrt , sqlite3
+import matplotlib.pyplot as plt
+import pandas_datareader.data as web
 import datetime
 from selenium import webdriver
 from email.mime.image import MIMEImage
@@ -190,32 +190,28 @@ def startstockgo():
             continue
 #loadbookstock-----------------------------------------------------
     if emailstart == True:
-        filelist=[]
         print("\n\n讀取預定股票檔案...")
         try:
-            file=open("BookStock.log","r",encoding="UTF-8")
-            for line in file:
-                if line == "\n":continue
-                (bookdate,booktime,booknum,bookhope)=line.split('|')
-                filelist.append(line)
-                if bookdate == time.strftime("%Y-%m-%d"):
+            conn = sqlite3.connect('bookstock.db')
+            sql = "select * from stockdata;"
+            recs = conn.execute(sql)
+            for rec in recs:
+                if rec[0] == time.strftime("%Y-%m-%d"):
                     everydict={}
-                    everydict["num"]=booknum
-                    everydict["hstock"]=bookhope
-                    everydict["time"]=booktime
+                    everydict["time"]=rec[1]
+                    everydict["num"]=rec[2]
+                    everydict["hstock"]=rec[3]
                     datalist.append(everydict)
-                    filelist.remove(line)
-            file.close()
-            writefile=open("BookStock.log","w")
-            for line in filelist:
-                writefile.write(line)
-            writefile.close()
-        except IOError:
-            print("\n發生讀取錯誤，請檢察BookStock.log是否存在或損壞\n")
+                    conn.execute("delete from stockdata where stock={};".format(rec[2]))
+                    conn.commit()
+        except sqlite3.Error as e:
+            print("\n資料庫錯誤:{}\n".format(e))
             return
         except Exception as e:
             print("\n發生錯誤:{}\n".format(e))
             return
+        finally:
+            if "conn" in dir():conn.close()
         if len(datalist) == 0:
             print("\n今日並無預定股票\n")
             return
@@ -231,15 +227,18 @@ def startstockgo():
                 Hour = int(time.strftime("%H"))
                 Min = int(time.strftime("%M"))
                 Sec = int(time.strftime("%S"))
-                if Hour > int(dhour) or (Hour == int(dhour) and Min > int(dmin)) or (Hour == int(dhour) and Min == int(dmin) and Sec == int(dsec)):
-                    print("\n股票{}的時間({})已經到了，並沒有到期望值{}".format(stockname,data["time"],data["hstock"]))
+                if Hour > int(dhour) or (Hour == int(dhour) and Min > int(dmin))\
+                or (Hour == int(dhour) and Min == int(dmin) and Sec == int(dsec)):
+                    print("\n股票{}的時間({})已經到了，並沒有到期望值{}"
+                          .format(stockname,data["time"],data["hstock"]))
                     datalist.pop(i)
                     i-=1
                 if float(stockhigh) < float(stocklow):#high期望值low當時值
                     analysis(data["num"])
                     print()
                     emailsend(stockname,stocklow,emailuser)
-                    print("\n股票{}已經到期望值{}，到的時間為{}時{}分{}秒".format(stockname,data["hstock"],Hour,Min,Sec))
+                    print("\n股票{}已經到期望值{}，到的時間為{}時{}分{}秒"
+                          .format(stockname,data["hstock"],Hour,Min,Sec))
                     os.remove(r"{}/{}({}).png".format(os.path.dirname(__file__),datetime.date.today(),stockname))
                     datalist.pop(i)
                     i-=1
@@ -248,4 +247,3 @@ def startstockgo():
                 print("\n在{}".format(time.strftime("%Y/%m/%d(%H.%M.%S)")))
                 print("股票全數完畢\n")
                 break
-startstockgo()
