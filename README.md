@@ -4,7 +4,7 @@
 main為主檔(必)      
 startstock為開始股票通知用(必)      
 bookstock為預訂股票用(必)     
-ssearch.py為查詢刪除用(必)
+ssearch.py為查詢刪除用(必)     
 emailtest為email測試用(必)      
 final2為圖案測試      
 chromedriver.exe為selenium模組模擬用(必)      
