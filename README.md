@@ -25,4 +25,11 @@ emailtest.py(測試Email)
 新增      
 bookstock.py(股票預定用)      
 用startstock.py(開始股票通知用)     
-取代stock.py      
+取代stock.py  
+---2018/12/25   18:00   
+使用SQLite來當資料庫     
+更新      
+bookstock.py      
+startstock.py     
+新增      
+search.py(查詢與刪除)
