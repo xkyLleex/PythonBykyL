@@ -7,6 +7,7 @@ bookstock為預訂股票用(必)
 ssearch.py為查詢刪除用(必)     
 emailtest為email測試用(必)      
 final2為圖案測試      
+maingui為程式圖形化介面(GUI)      
 chromedriver.exe為selenium模組模擬用(必)      
 -------
 *注意:請去安裝python的selenium模組     
@@ -34,3 +35,11 @@ bookstock.py
 startstock.py     
 新增      
 search.py(查詢與刪除)
+---2018/12/30   22:25
+新增      
+maingui.py(gui)     
+更新      
+main.py     
+bookstock.py      
+startstock.py     
+search.py     
