@@ -198,11 +198,10 @@ def startstockgo():
             for rec in recs:
                 if rec[0] == time.strftime("%Y-%m-%d"):
                     everydict={}
-                    everydict["time"]=rec[1]
-                    everydict["num"]=rec[2]
-                    everydict["hstock"]=rec[3]
+                    everydict["num"]=rec[1]
+                    everydict["hstock"]=rec[2]
                     datalist.append(everydict)
-                    conn.execute("delete from stockdata where stock={};".format(rec[2]))
+                    conn.execute("delete from stockdata where stock={} and date='{}';".format(rec[1],rec[0]))
                     conn.commit()
         except sqlite3.Error as e:
             print("\n資料庫錯誤:{}\n".format(e))
@@ -223,23 +222,20 @@ def startstockgo():
                 time.sleep(1)#frush
                 stocklow = stockcheck(data["num"])
                 stockhigh = data["hstock"]
-                (dhour,dmin,dsec)=data["time"].split(".")
                 Hour = int(time.strftime("%H"))
-                Min = int(time.strftime("%M"))
-                Sec = int(time.strftime("%S"))
-                if Hour > int(dhour) or (Hour == int(dhour) and Min > int(dmin))\
-                or (Hour == int(dhour) and Min == int(dmin) and Sec == int(dsec)):
-                    print("\n股票{}的時間({})已經到了，並沒有到期望值{}"
-                          .format(stockname,data["time"],data["hstock"]))
-                    datalist.pop(i)
-                    i-=1
                 if float(stockhigh) < float(stocklow):#high期望值low當時值
                     analysis(data["num"])
                     print()
                     emailsend(stockname,stocklow,emailuser)
-                    print("\n股票{}已經到期望值{}，到的時間為{}時{}分{}秒"
-                          .format(stockname,data["hstock"],Hour,Min,Sec))
-                    os.remove(r"{}/{}({}).png".format(os.path.dirname(__file__),datetime.date.today(),stockname))
+                    print("\n股票{}已經到期望值{}，到的時間為{}"
+                          .format(stockname,data["hstock"],time.strftime("%H:%M:%S")))
+                    os.remove("{}({}).png".format(datetime.date.today(),stockname))
+                    datalist.pop(i)
+                    i-=1
+                    continue
+                if Hour > 13:
+                    print("\n股票{}的時間已經超過13點，並沒有到期望值{}"
+                          .format(stockname,data["hstock"]))
                     datalist.pop(i)
                     i-=1
                 i+=1

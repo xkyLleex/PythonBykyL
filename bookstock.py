@@ -3,7 +3,6 @@ import re , bs4 , time , requests , sqlite3
 def writein(data):
     print("\n寫入資料中.....")
     date=data["date"]
-    time=data["time"]
     stock=data["stocknum"]
     hstock=data["hopestock"]
     try:
@@ -12,7 +11,6 @@ def writein(data):
         create table if not exists stockdata
             (
              date    text      not null,
-             time    text      not null,
              stock   integer   not null,
              hstock  REAL      not null
             );
@@ -22,8 +20,8 @@ def writein(data):
         match = data.fetchone()
         if match[0] == 0:
             conn.execute('''
-            insert into stockdata(date, time, stock, hstock) values ('{}','{}',{},{});
-            '''.format(date,time,stock,hstock))
+            insert into stockdata(date, stock, hstock) values ('{}',{},{});
+            '''.format(date,stock,hstock))
             conn.commit()
             print("\n完成.....")
         else:print("\n資料庫已有這筆資料了({}股票代碼:{})，請更換或把它刪除！".format(date,stock))
@@ -31,6 +29,7 @@ def writein(data):
     except Exception as e:print("\n錯誤:{}".fomrat(e))
     finally:
         if "conn" in dir():conn.close()
+        
 def stockcheck(stocknum):
     try:
         url = "https://tw.finance.yahoo.com/q/ts?s={}".format(stocknum)
@@ -54,30 +53,7 @@ def stockcheck(stocknum):
     except Exception as e:
         print("發生錯誤:{}".format(e))
         quit()
-def timecheck(date):
-    try:
-        settime=input("\n設定從現在到幾點ex(輸入09.06.01 or 12.16.21)24H制\n請輸入時間(9-13)(按Enter上一步):")
-    except Exception as e:
-        print("發生錯誤:{}".format(e))
-        quit()
-    if settime=="":return 1
-    if re.search(r"\d{2}\.\d{2}\.\d{2}",settime)!=None:
-        (hour,mins,sec)=settime.split(".")
-        try:
-            if 24 > int(hour) >= 0 and 60 > int(mins) >= 0 and 60 > int(sec) >= 0:
-                if 24 > int(hour) > 8:
-                    if date != time.strftime("%Y-%m-%d"):return settime
-                    if int(hour) < int(time.strftime("%H")):return 6
-                    if int(hour) == int(time.strftime("%H")):
-                        if int(mins) < int(time.strftime("%M")):return 6
-                        elif int(mins) == int(time.strftime("%M")) and int(sec) <= int(time.strftime("%S")):
-                            return 6
-                    return settime
-                else:return 5
-            else:return 3
-        except:return 4
-    else:return 2
-    #1 空白 2 時間格式錯誤 3 時間數值錯誤 4 數字 5 9-13 6 未來
+        
 def datecheck():
     try:
         settime=input("\n設定預定日期ex(輸入2018-02-17)\n請輸入日期(按Enter上一步):")
@@ -92,8 +68,8 @@ def datecheck():
             month = int(strmonth)
             day = int(strday)
             if 12 < month or month < 1 :return 3
+            if day <= 0:return 3
             if month != 2:
-                if day <= 0:return 3
                 if month < 8:
                     if month % 2 == 1:
                         if day > 31:return 3
@@ -114,24 +90,33 @@ def datecheck():
                 if month < int(time.strftime("%m")):return 5
                 if month == int(time.strftime("%m")) and day < int(time.strftime("%d")):return 5
                 if month == int(time.strftime("%m")) and day == int(time.strftime("%d")):
-                    if int(time.strftime("%H")) > 13:return settime
+                    if int(time.strftime("%H")) > 13:return 6
             return settime
         except:return 4
     else:return 2
     #1 空白 2 時間格式錯誤 3 時間數值錯誤 4 數字 5 未來notnow 6 今天股票時間已結束
+    
 def bookstockgo():
     data = False
 #check stock-------------------------------------------------------
     while(True):
         stockdata={}
-        stocknum=input("\n輸入股票代碼如(輸入1477)對應聚陽[限定上市公司](按Enter返回目錄)\n請輸入代碼:")
+        try:
+            stocknum=input("\n輸入股票代碼如(輸入1477)對應聚陽[限定上市公司](按Enter返回目錄)\n請輸入代碼:")
+        except Exception as e:
+            print("出現錯誤:{}".format(e))
+            quit()
         if stocknum == "":break
         if stockcheck(stocknum) == "no":#代碼不存在
             continue
         print("股票:{}".format(stockname))
 #hope stock--------------------------------------------------------
         while(True):
-            stockhigh=input("\n請輸入期望值(按Enter上一步):")
+            try:
+                stockhigh=input("\n請輸入期望值(按Enter上一步):")
+            except Exception as e:
+                print("出現錯誤:{}".format(e))
+                quit()
             if stockhigh=="":
                 break
             try:
@@ -160,39 +145,17 @@ def bookstockgo():
                 elif setdate == 6:
                     print("今天股票時間已結束，請換一個日期")
                     continue
-#time check---------------------------------------------------------
-                while(True):
-                    settime=timecheck(setdate)
-                    if settime == 1 :break
-                    elif settime == 2 :
-                        print("時間[格式]錯誤")
-                        continue
-                    elif settime == 3:
-                        print("時間[數值]錯誤")
-                        continue
-                    elif settime == 4:
-                        print("請輸入[數字]")
-                        continue
-                    elif settime == 5:
-                        print("請輸入9-13之間的時間")
-                        continue
-                    elif settime == 6:
-                        print("請輸入未來的時間")
-                        continue
 #run------------------------------------------------------------
-                    stockdata["stocknum"]=int(stocknum)
-                    stockdata["hopestock"]=float(stockhigh)
-                    stockdata["date"]=setdate
-                    stockdata["time"]=settime
-                    data = True
-                    break
-                if data == True:
-                    break
+                stockdata["stocknum"]=int(stocknum)
+                stockdata["hopestock"]=float(stockhigh)
+                stockdata["date"]=setdate
+                data = True
+                break
             if data == True:
                 break
         if data == True:
-            print('\n股票代碼:{}\n期望值:{}\n預定日期:{}\n預定截止時間:{}\n'.format(
-            stockdata["stocknum"],stockdata["hopestock"],stockdata["date"],stockdata["time"],))
+            print('\n股票代碼:{}\n期望值:{}\n預定日期:{}\n'.format(
+            stockdata["stocknum"],stockdata["hopestock"],stockdata["date"]))
             yorn=input("確認資料是否正確(y/n):")
             data = False
             if yorn.lower() == "y":writein(stockdata)

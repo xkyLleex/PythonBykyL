@@ -1,6 +1,7 @@
 import emailtest, bookstock , startstock , search
 while True:
-    print("輸入編號來指定功能(按Enter已結束程式)\n1.開始股票功能\n2.預定股票(未來限定)\n3.查詢預定的股票\n4.刪除預定的股票\n5.測試Email")
+    print("輸入編號來指定功能(按Enter已結束程式)\
+    \n1.開始股票功能\n2.預定股票(未來限定)\n3.查詢預定的股票\n4.刪除預定的股票\n5.測試Email")
     num=input("請輸入編號:")
     if num=="":break
     #send email stock and analysis
@@ -14,4 +15,4 @@ while True:
     #email test
     elif num=="5":emailtest.testgo()
     else:print("並無此代號")
-    print()
+print()

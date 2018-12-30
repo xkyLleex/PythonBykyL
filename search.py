@@ -9,13 +9,13 @@ def datasearch(num=0):
             if num == 0:
                 if i==1:
                     print("-"*40)
-                    print("編號   日期        時間    股票代碼  期望值")
-                print("{:>2}  {} | {} | {:>4} |{:>7}".format(i,rec[0],rec[1],rec[2],rec[3]))
+                    print("編號   日期      股票代碼  期望值")
+                print("{:>2}  {} | {:>4} |{:>7}".format(i,rec[0],rec[1],rec[2]))
             elif num == i:
                 print("刪除中...")
                 conn.execute('''
                 delete from stockdata where date='{}' and stock={};
-                '''.format(rec[0],rec[2]))
+                '''.format(rec[0],rec[1]))
                 conn.commit()
                 print("完畢")
             i+=1

@@ -30,7 +30,7 @@ def emailgo(mailuser,mailpassword):
         server.ehlo()
     except smtplib.SMTPException:
         print("SMTP伺服器錯誤")
-    finally:
+    else:
         try:
             server.login(mailuser, mailpassword)
             server.send_message(msg)
@@ -38,9 +38,8 @@ def emailgo(mailuser,mailpassword):
             print("\n\n帳號出現錯誤!!!\n可能錯誤地方:\n1.Email帳密錯誤\n",end="")
             print("2.沒允許低安全性應用程式存取您的帳戶\n3.有人機驗證鎖定\n4.沒啟用兩步驟驗證跟設定應用程式專用密碼\n5.不明錯誤")
             fixerror()
-        else:
-            server.quit()
-            print('Email成功傳出')
+        else:print('Email成功傳出')
+    finally:server.quit()
 
 def pwdstar():    
     chars = []   
