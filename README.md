@@ -35,7 +35,7 @@ bookstock.py
 startstock.py     
 新增      
 search.py(查詢與刪除)      
----2018/12/30   22:25
+---2018/12/30   22:25     
 新增      
 maingui.py(gui)     
 更新      
