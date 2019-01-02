@@ -181,6 +181,15 @@ def startstock():
         errormsg.configure(text="讀取資料庫中...")
         try:
             conn = sqlite3.connect('bookstock.db')
+            conn.execute('''
+                    create table if not exists stockdata
+                    (
+                            date    text      not null,
+                            stock   integer   not null,
+                            hstock  REAL      not null
+                    );
+						''')
+            conn.commit()
             sql = "select * from stockdata;"
             recs = conn.execute(sql)
             i=0
@@ -371,6 +380,15 @@ def search_delete():
     def updata():
         try:
             conn = sqlite3.connect('bookstock.db')
+            conn.execute('''
+                    create table if not exists stockdata
+                    (
+                            date    text      not null,
+                            stock   integer   not null,
+                            hstock  REAL      not null
+                    );
+						''')
+            conn.commit()
             sql = "select * from stockdata;"
             data = conn.execute(sql)
             i=0
@@ -438,7 +456,7 @@ def emailtest():
                     lablefix.configure(text="不明錯誤=>去詢問作者ㄅ")
             except:
                 lablefix.configure(text="請選擇")
-            fixmain.after(500,fixthis)
+            fixmain.after(250,fixthis)
             
         fixmain = tk.Toplevel(testmain)
         fixmain.title("FixError")
