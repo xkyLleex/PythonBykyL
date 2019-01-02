@@ -43,3 +43,8 @@ main.py
 bookstock.py      
 startstock.py     
 search.py     
+---2019-1-2   09:07     
+更新      
+maingui優先新增資料庫      
+新增      
+install.bat(下載模組用)      
