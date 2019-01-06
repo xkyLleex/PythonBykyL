@@ -10,7 +10,7 @@ final2為圖案測試
 maingui為程式圖形化介面(GUI)      
 chromedriver.exe為selenium模組模擬用(必)      
 -------
-*注意*:請直接執行install.bat     
+*注意:請直接執行install.bat     
 windows限定！      
 -------
 ---2018/12/07   00:14      
