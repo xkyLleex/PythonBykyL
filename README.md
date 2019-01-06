@@ -9,10 +9,10 @@ emailtest為email測試用(必)
 final2為圖案測試      
 maingui為程式圖形化介面(GUI)      
 chromedriver.exe為selenium模組模擬用(必)      
--------
-*注意:請去安裝python的selenium模組     
-*指令：pip install selenium      
--------
+-------     
+*注意*:請直接執行install.bat     
+windows限定！      
+-------     
 ---2018/12/07   00:14      
 新增      
 stock.py(單一股票通知)      
