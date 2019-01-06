@@ -13,7 +13,7 @@ def pwdstar():
         try:  
             nchar = msvcrt.getch().decode()  
         except:
-            return input("(注意)你可能不是在cmd命令行下運行，密碼輸入將不能隱藏:")
+            return input("請輸入Email密碼：")
         if nchar in "\r\n": #如果是換行，則輸入結束
              break
         elif nchar == "\b": #如果是退格，則刪除密碼末尾一位並且刪除一個星號  
@@ -45,7 +45,13 @@ def analysis(stocknum):
     datastock=[]
     for line in round(stockfind.mean(),2):
         datastock.append(line)
-    plt.savefig("{}({}).png".format(end,stockname))
+    plt.savefig("{}({})1.png".format(end,stockname))
+    #------------
+    passyear=datetime.timedelta(days=365/2)
+    start=end-passyear
+    stockfind=web.DataReader(company,"yahoo",start,end)
+    print(stockfind["Volume"].plot())
+    plt.savefig("{}({})2.png".format(end,stockname))
     #------------infodata 0:kline data:1 2 3 4 5...
     infodata=[]
     try:
@@ -87,7 +93,8 @@ def emailsend(stockname,stock,emailuser):
     ---------------------------------
     股價與20週均線的走勢圖與近半年的成交量:
     <span style="color:#DB0000;">(提醒：當股價向上突破20週均線，代表「空翻多」；當股價跌破20週均線，代表「多翻空」。)</span>
-    <img src="cid:analysis">
+    <img src="cid:analysis1">
+    <img src="cid:analysis2">
     </pre>
     """.format(stockname,
     stock,datastock[0],datastock[1],datastock[2],datastock[3],datastock[4],datastock[5],
@@ -100,10 +107,15 @@ def emailsend(stockname,stock,emailuser):
     msg['From'] = emailuser
     msg['To'] = emailuser
     msg.attach(MIMEText(mailmsg, "html", "utf-8"))
-    aimage = open("{}({}).png".format(datetime.date.today(),stockname), "rb")
+    aimage = open("{}({})1.png".format(datetime.date.today(),stockname), "rb")
     msgImage = MIMEImage(aimage.read())
     aimage.close()
-    msgImage.add_header("Content-ID", "<analysis>")
+    msgImage.add_header("Content-ID", "<analysis1>")
+    msg.attach(msgImage)
+    aimage = open("{}({})2.png".format(datetime.date.today(),stockname), "rb")
+    msgImage = MIMEImage(aimage.read())
+    aimage.close()
+    msgImage.add_header("Content-ID", "<analysis2>")
     msg.attach(msgImage)
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.ehlo()
@@ -140,7 +152,7 @@ def emailcheck(mailuser):
     if mailuser == "":return 1
     if re.search(r'[a-zA-Z0-9_.+-]+@gmail+\.[a-zA-Z0-9-.]+',mailuser)==None:return 2
     global userpwd
-    print("請輸入Email密碼:",end="",flush=True)
+    print("(注意)您如果不是在cmd命令行下執行，密碼將無法隱藏！",end="",flush=True)
     userpwd = pwdstar()
     try:
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
@@ -156,7 +168,7 @@ def startstockgo():
 #email check-----------------------------------------------------------
     while(True):
         try:
-            emailuser = input("\n請輸入Email帳號(只支援Gmail，按Enter結束程序):")
+            emailuser = input("\n請輸入Email帳號(本程式只支援Gmail，不輸入請直接按Enter回到最初的功能選擇):")
         except Exception as e:
             print("發生錯誤:{}".format(e))
             quit()
@@ -183,14 +195,14 @@ def startstockgo():
             emailstart = True
             break
         elif chose.lower() == "n":
-            print("如果有錯，請重新打！")
+            print("如果有錯，請重新設定！")
             continue
         else:
-            print("誰叫你不輸入Y或N兩個字元，請重新打")
+            print("誰叫你不輸入y或n，，請重新設定吧！！")
             continue
 #loadbookstock-----------------------------------------------------
     if emailstart == True:
-        print("\n\n讀取預定股票檔案...")
+        print("\n\n讀取預設股票檔案...")
         try:
             conn = sqlite3.connect('bookstock.db')
             sql = "select * from stockdata;"
@@ -201,8 +213,6 @@ def startstockgo():
                     everydict["num"]=rec[1]
                     everydict["hstock"]=rec[2]
                     datalist.append(everydict)
-                    conn.execute("delete from stockdata where stock={} and date='{}';".format(rec[1],rec[0]))
-                    conn.commit()
         except sqlite3.Error as e:
             print("\n資料庫錯誤:{}\n".format(e))
             return
@@ -212,7 +222,7 @@ def startstockgo():
         finally:
             if "conn" in dir():conn.close()
         if len(datalist) == 0:
-            print("\n今日並無預定股票\n")
+            print("\n今日並未預設任何股票\n")
             return
 #Start------------------------------------------------------------
         print("開始運算中.....")
@@ -223,23 +233,33 @@ def startstockgo():
                 stocklow = stockcheck(data["num"])
                 stockhigh = data["hstock"]
                 Hour = int(time.strftime("%H"))
+                Min = int(time.strftime("%M"))
                 if float(stockhigh) < float(stocklow):#high期望值low當時值
                     analysis(data["num"])
                     print()
                     emailsend(stockname,stocklow,emailuser)
                     print("\n股票{}已經到期望值{}，到的時間為{}"
                           .format(stockname,data["hstock"],time.strftime("%H:%M:%S")))
-                    os.remove("{}({}).png".format(datetime.date.today(),stockname))
+                    os.remove("{}({})1.png".format(datetime.date.today(),stockname))
+                    os.remove("{}({})2.png".format(datetime.date.today(),stockname))
                     datalist.pop(i)
+                    conn = sqlite3.connect('bookstock.db')
+                    conn.execute("delete from stockdata where stock={} and date='{}';"
+                                 .format(data["num"],time.strftime("%Y-%m-%d")))
+                    conn.commit()
                     i-=1
                     continue
-                if Hour > 13:
-                    print("\n股票{}的時間已經超過13點，並沒有到期望值{}"
+                if Hour > 13 and Min > 30:
+                    print("\n時間已經超過13點半，股票{}並未達到期望值{}"
                           .format(stockname,data["hstock"]))
                     datalist.pop(i)
+                    conn = sqlite3.connect('bookstock.db')
+                    conn.execute("delete from stockdata where stock={} and date='{}';"
+                                 .format(data["num"],time.strftime("%Y-%m-%d")))
+                    conn.commit()
                     i-=1
                 i+=1
             if len(datalist) == 0:
                 print("\n在{}".format(time.strftime("%Y/%m/%d(%H.%M.%S)")))
-                print("股票全數完畢\n")
+                print("今日股市已收盤\n")
                 break

@@ -11,16 +11,17 @@ def datasearch(num=0):
                     print("-"*40)
                     print("編號   日期      股票代碼  期望值")
                 print("{:>2}  {} | {:>4} |{:>7}".format(i,rec[0],rec[1],rec[2]))
+                print()
             elif num == i:
                 print("刪除中...")
                 conn.execute('''
                 delete from stockdata where date='{}' and stock={};
                 '''.format(rec[0],rec[1]))
                 conn.commit()
-                print("完畢")
+                print("刪除成功！！")
             i+=1
         if(num == 0 and i == 1) or (num != 0 and i == 1):
-            print("資料庫無資料！請先預訂股票後才可查詢跟刪除。")
+            print("資料庫無資料！請先預設股票後才能查詢跟刪除。")
             return "NO"
         if num != 0 and num >= i:print("請輸入正確編號！")
     except sqlite3.Error as e:
@@ -34,7 +35,7 @@ def datasearch(num=0):
 def delete():
     if datasearch() == "NO":return
     while(True):
-        delnum = input("請選擇要刪除的編號(按Enter已結束):")
+        delnum = input("請選擇要刪除的編號(按Enter回到最初的功能選擇):")
         if delnum == "":break
         try:
             datasearch(int(delnum)) if int(delnum) > 0 else print("請輸入正確編號！(0以上)")
