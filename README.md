@@ -13,6 +13,7 @@ chromedriver.exe為selenium模組模擬用(必)
 注意:請直接執行install.bat     
 windows限定！      
 -------
+更新日誌:     
 ---2018/12/07   00:14      
 新增      
 stock.py(單一股票通知)      
