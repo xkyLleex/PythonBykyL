@@ -4,15 +4,15 @@
 main為主檔(必)      
 startstock為開始股票通知用(必)      
 bookstock為預訂股票用(必)     
-ssearch.py為查詢刪除用(必)     
+search.py為查詢刪除用(必)     
 emailtest為email測試用(必)      
 final2為圖案測試      
 maingui為程式圖形化介面(GUI)      
 chromedriver.exe為selenium模組模擬用(必)      
--------     
+-------
 *注意*:請直接執行install.bat     
 windows限定！      
--------     
+-------
 ---2018/12/07   00:14      
 新增      
 stock.py(單一股票通知)      
