@@ -161,7 +161,7 @@ def startstock():
                 datalist.pop(i)
                 i-=1
                 continue
-            if(Hour == 13 and Min >= 30) or (Hour > 13):##change-----------
+            if(Hour == 13 and Min >= 30) or (Hour > 13):
                 msg.showinfo("股票資訊","股票{}的時間已經超過13點半\n並沒有到期望值{}"
                       .format(stockname,data["hstock"]))
                 try:
@@ -370,7 +370,6 @@ def bookstock():
                     if month == int(time.strftime("%m")) and day < int(time.strftime("%d")):return 5
                     if month == int(time.strftime("%m")) and day == int(time.strftime("%d")):
                         if(int(time.strftime("%H")) == 13 and int(time.strftime("%M")) > 30) or (int(time.strftime("%H")) > 13):return 6
-                ##change-----------
                 return settime
             except:return 4
         else:return 2
