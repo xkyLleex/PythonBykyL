@@ -8,7 +8,7 @@ from selenium import webdriver
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+#372[ 6 <---> settime ]
 def stockcheck(stocknum):
     try:
         url = "https://tw.finance.yahoo.com/q/ts?s={}".format(stocknum)
