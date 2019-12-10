@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<title>test</title>
+<meta charset="utf-8">
+<style>
+	body {
+		font-family: "Lato", sans-serif;
+	}
+
+	.sidenav {
+		width: 130px;
+		position: fixed;
+		z-index: 1;
+		top: 20px;
+		left: 10px;
+		background-color: orange;
+		overflow-x: hidden;
+		padding: 8px 0;
+	}
+
+	.sidenav a {
+		padding: 6px 8px 6px 16px;
+		text-decoration: none;
+		font-size: 25px;
+		color: blue;
+		display: block;
+	}
+	
+	.sidenav p{
+		margin: auto;
+		padding-left: 16px;
+		text-decoration: none;
+		font-size: 25px;
+		color: while;
+		background:tomato;
+		display: block;
+	}
+
+	.sidenav a:hover {
+		color: red;
+	}
+
+	.main {
+		margin-left: 140px;
+		font-size: 28px;
+		padding: 0px 10px;
+	}
+	
+	.bottom{
+		height: 150px;
+		background: gray;
+	}
+	.bottom div{
+		float:left;
+		margin-left:5%;
+		padding-top:1%;
+		display:block;
+	}
+	.bottom div p{
+		background:lightblue;
+		display:block;
+	}
+
+</style>
+<script>
+	function get(){
+		var text = "Color:";
+		text += document.getElementsByName("color")[0].value;
+		document.getElementById("text").innerHTML = text;
+	}
+</script>
+</head>
+<body>
+
+	<div class="sidenav">
+		<p>TextTitle</p>
+		<a href="#text1">text1</a>
+		<a href="#text2">text2</a>
+		<a href="#text3">text3</a>
+		<a href="#text4">text4</a>
+	</div>
+
+	<div class="main">
+	  <h2>Title</h2>
+	  <p>text</p>
+	  <p>text</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <p>texttexttexttexttexttexttexttexttexttexttext</p>
+	  <form>
+		  Color:<input type="color" name="color">
+		  <input type="button" onclick="get()" value="Send">
+		  <br><br>
+		  <textarea name="textarea" rows="10" cols="50" placeholder="input_text_here"></textarea>
+		  <p id="text"></p>
+	  </form>
+	</div>  
+	<div class="bottom">
+		<div>
+			<p>text1</p>
+			<p>text2</p>
+			<p>text3</p>
+		</div>
+		<div>
+			<p>text4</p>
+			<p>text5</p>
+			<p>text6</p>
+		</div>
+	</div>
+</body>
+</html> 
