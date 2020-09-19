@@ -1,0 +1,1 @@
+pyuic5 NAT_Message.ui > NAT_Message_UI.py
